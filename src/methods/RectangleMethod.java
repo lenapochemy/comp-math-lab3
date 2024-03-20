@@ -38,16 +38,21 @@ public class RectangleMethod extends AbstractMethod{
                 }
                 f_x = function.apply(x);
 //                writeIteration("x = " + x + " f(x) = " + f_x);
+                if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
+                    x = x + 0.0000001;
+                    f_x = function.apply(x);
+                }
                 sum += f_x;
             }
             result = h * sum;
             writeIteration("Новое значение интеграла: " + result + " при числе разбиений: " + n);
             writeIteration("------------------------------");
-
+            checkDivergent();
             if(checkEndCondition()) break;
             result_last = result;
             n = n * 2;
         }
         writeResult("Результат:\nЗначение интеграла: " + result + " при числе разбиений: " + n);
+
     }
 }

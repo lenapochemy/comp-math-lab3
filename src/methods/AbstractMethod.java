@@ -1,7 +1,5 @@
 package methods;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.DoubleFunction;
@@ -11,7 +9,7 @@ public abstract class AbstractMethod {
     public final DoubleFunction<Double> function;
     public final int firstN;
     public final double a, b, eps;
-    public double h, h_next, sum, x, f_x, result, result_last;
+    public double h, delta, sum, x, f_x, result, result_last;
     public int n;
     public int k; // порядок точности квадратурной формулы
     private boolean solveMode;
@@ -23,9 +21,27 @@ public abstract class AbstractMethod {
         this.b = b;
         this.firstN = 4;
         this.result_last = 0;
+        this.delta = Double.MAX_VALUE;
 //        this.h = (b- a) / firstN;
     }
 
+//    public static boolean checkDivergent(int num, double a, double b){
+//        if(num == 5){
+//            return a <= 1 && 1 <= b;
+//        } else return false;
+//
+//    }
+
+    public void checkDivergent(){
+        if(result_last != 0) {
+            if (Math.abs(result - result_last) > delta) {
+                System.out.println("Интеграл расходится");
+                System.exit(0);
+            }
+            delta = Math.abs(result - result_last);
+//            writeIteration("delta = " + delta);
+        }
+    }
     public abstract void solve();
     //вернет true, когда условие окончания выполняется, и надо заканчивать итерации
     public boolean checkEndCondition(){

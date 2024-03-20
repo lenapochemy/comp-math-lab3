@@ -1,3 +1,4 @@
+import exception.IncorrectValueException;
 import methods.*;
 
 import java.util.NoSuchElementException;
@@ -155,8 +156,15 @@ public class ScannerManager {
         return num;
     }
 
-    public double sayA(){
-        return sayDoubleNumber("левой границы интервала");
+    public double sayA(int num){
+        if(num == 1){
+            double a = -1;
+            while (a < 0){
+                a = sayDoubleNumber("левой границы интервала");
+                if(a < 0) System.out.println("Функция неопределена на отрицательных числах, выберите неотрицательное значение левой границы интервала");
+            }
+            return a;
+        } else return sayDoubleNumber("левой границы интервала");
     }
 
     public double sayB(double a) {
