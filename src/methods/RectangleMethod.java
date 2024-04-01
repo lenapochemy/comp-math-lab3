@@ -1,20 +1,21 @@
 package methods;
 
-import java.util.function.DoubleFunction;
+import data.IntegratedFunction;
 
 public class RectangleMethod extends AbstractMethod{
 
-    private final TypeOfRectangleMethod type;
-    public RectangleMethod(DoubleFunction<Double> function, double eps, double a, double b, TypeOfRectangleMethod type){
+    private TypeOfRectangleMethod type;
+    public RectangleMethod(IntegratedFunction function, double eps, double a, double b, TypeOfRectangleMethod type){
         super(function, eps, a, b);
         this.type = type;
         this.k = 2;
     }
 
-    @Override
-    public void solve() {
 
+    public void oneTypeSolve(){
         n = firstN;
+        this.result_last = 0;
+        this.delta = Double.MAX_VALUE;
 //        result_last = 0;
         while (true) {
             h = (b - a) / n;
@@ -36,23 +37,39 @@ public class RectangleMethod extends AbstractMethod{
                         x = i;
                     }
                 }
-                f_x = function.apply(x);
+                f_x = function.function().apply(x);
 //                writeIteration("x = " + x + " f(x) = " + f_x);
                 if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
                     x = x + 0.0000001;
-                    f_x = function.apply(x);
+                    f_x = function.function().apply(x);
                 }
                 sum += f_x;
             }
             result = h * sum;
             writeIteration("Новое значение интеграла: " + result + " при числе разбиений: " + n);
             writeIteration("------------------------------");
-            checkDivergent();
             if(checkEndCondition()) break;
             result_last = result;
             n = n * 2;
         }
         writeResult("Результат:\nЗначение интеграла: " + result + " при числе разбиений: " + n);
 
+    }
+    @Override
+    public void solve() {
+        if(type == TypeOfRectangleMethod.ALL){
+            writeResult("------------------------------");
+            writeResult("Метод левых прямоугольников:\n");
+            type = TypeOfRectangleMethod.LEFT;
+            oneTypeSolve();
+            writeResult("------------------------------");
+            writeResult("Метод средних прямоугольников:\n");
+            type = TypeOfRectangleMethod.MEDIUM;
+            oneTypeSolve();
+            writeResult("------------------------------");
+            writeResult("Метод правых прямоугольников:\n");
+            type = TypeOfRectangleMethod.RIGHT;
+            oneTypeSolve();
+        } else oneTypeSolve();
     }
 }

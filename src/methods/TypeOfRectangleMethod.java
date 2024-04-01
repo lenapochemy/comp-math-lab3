@@ -1,13 +1,12 @@
 package methods;
 
 public enum TypeOfRectangleMethod {
-    LEFT("левые"),
-    RIGHT("правые"),
-    MEDIUM("средние");
+    LEFT(),
+    RIGHT(),
+    MEDIUM(),
+    ALL();
 
-    private final String type;
-    TypeOfRectangleMethod(String type){
-        this.type = type;
+    TypeOfRectangleMethod(){
     }
 
 }

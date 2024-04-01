@@ -1,14 +1,14 @@
+import data.IntegratedFunction;
 import exception.IncorrectValueException;
 import methods.*;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.function.DoubleFunction;
 
 public class ScannerManager {
     private Scanner scanner;
-    public ScannerManager(Scanner scanner){
-        this.scanner = scanner;
+    public ScannerManager(){
+        this.scanner = new Scanner(System.in);
     }
 
     public boolean saySolveMode(){
@@ -33,56 +33,54 @@ public class ScannerManager {
             } catch (IncorrectValueException | NullPointerException e){
                 System.out.println("Ответ должен быть \"y\" или \"n\"");
             } catch (NoSuchElementException e){
-                System.out.println("Данные не найдены в файле");
-                System.exit(0);
+                System.out.println("Введите значение");
             }
         }
         return flag;
     }
 
-    public AbstractMethod sayMethod(DoubleFunction<Double> function, double eps, double a, double b){
+    public AbstractMethod sayMethod(IntegratedFunction function, double eps, double a, double b){
         boolean flag = false;
         while(!flag) {
             try {
-                System.out.print("Выберите метод решения уравнения: Метод прямоугольников(r), Метод трапеций(t), Метод Симпсона(s) ");
+                System.out.println("Выберите метод решения уравнения:\n\t1. Метод прямоугольников\n\t2. Метод трапеций\n\t3. Метод Симпсона");
                 String ans = scanner.nextLine().trim();
                 switch (ans) {
                     case "" ->
                             throw new NullPointerException();
-                    case "r" -> {
+                    case "1" -> {
                         flag = true;
                         TypeOfRectangleMethod type = sayRectangleType();
                         return new RectangleMethod(function, eps, a, b, type);
                     }
-                    case "t" -> {
+                    case "2" -> {
                         flag = true;
                         return new TrapezoidMethod(function, eps, a, b);
                     }
-                    case "s" -> {
+                    case "3" -> {
                         flag = true;
                         return new SimpsonMethod(function, eps, a, b);
                     }
                     default -> throw new IncorrectValueException();
                 }
             } catch (IncorrectValueException | NullPointerException e){
-                System.out.println("Ответ должен быть \"r\" или \"t\" или \"s\"");
+                System.out.println("Ответ должен быть положительным числом, не большим 3");
             } catch (NoSuchElementException e){
-                System.out.println("Данные не найдены в файле");
-                System.exit(0);
+                System.out.println("Введите значение");
             }
         }
         return null;
     }
 
-    public int sayFunctionNumber(String[] functionStrings){
-        int n = functionStrings.length;
+    public int sayFunctionNumber(IntegratedFunction[] functions){
+        int n = functions.length;
         int num = 0;
         String sNum;
         while (num <= 0 || num > n){
             try {
                 System.out.println("Выберите функцию для решения: ");
                 for(int i = 0; i < n; i++){
-                    System.out.println("\t" + (i+1) + ". "+ functionStrings[i]);
+                    System.out.println("\t" + (i+1) + ". "+ functions[i].funcString());
                 }
                 sNum = scanner.nextLine().trim();
                 if(sNum.isEmpty()) throw new NullPointerException();
@@ -94,6 +92,8 @@ public class ScannerManager {
                 System.out.println("Номер функции не может быть пустым");
             }  catch (NumberFormatException e){
                 System.out.println("Номер функции должен быть целым числом");
+            } catch (NoSuchElementException e){
+                System.out.println("Введите значение");
             }
         }
         return num;
@@ -104,27 +104,33 @@ public class ScannerManager {
         boolean flag = false;
         while(!flag) {
             try {
-                System.out.print("Выберите тип метода прямоугольников: левые(l), правые(r), средние(m): ");
+                System.out.println("Выберите тип метода прямоугольников:\n\t1. Левые\n\t2. Правые\n\t3. Средние\n\t4. Все типы сразу");
                 String ans = scanner.nextLine().trim();
                 switch (ans) {
                     case "" ->
                             throw new NullPointerException();
-                    case "l" -> {
+                    case "1" -> {
                         flag = true;
                         return TypeOfRectangleMethod.LEFT;
                     }
-                    case "r" -> {
+                    case "2" -> {
                         flag = true;
                         return TypeOfRectangleMethod.RIGHT;
                     }
-                    case "m" -> {
+                    case "3" -> {
                         flag = true;
                         return TypeOfRectangleMethod.MEDIUM;
+                    }
+                    case "4" -> {
+                        flag = true;
+                        return TypeOfRectangleMethod.ALL;
                     }
                     default -> throw new IncorrectValueException();
                 }
             } catch (IncorrectValueException | NullPointerException e){
-                System.out.println("Ответ должен быть \"l\" или \"r\" или \"m\"");
+                System.out.println("Ответ должен быть положительным числом, не большим 4");
+            } catch (NoSuchElementException e){
+                System.out.println("Введите значение");
             }
         }
         return TypeOfRectangleMethod.MEDIUM;
@@ -149,15 +155,14 @@ public class ScannerManager {
             }   catch (NumberFormatException e){
                 System.out.println("Количество итераций должно быть числом");
             } catch (NoSuchElementException e){
-                System.out.println("Данные не найдены в файле");
-                System.exit(0);
+                System.out.println("Введите значение");
             }
         }
         return num;
     }
 
     public double sayA(int num){
-        if(num == 1){
+        if(num == 1 || num == 4){
             double a = -1;
             while (a < 0){
                 a = sayDoubleNumber("левой границы интервала");
@@ -192,8 +197,7 @@ public class ScannerManager {
             }  catch (NumberFormatException e){
                 System.out.println("Значение " + name + " должно быть числом");
             } catch (NoSuchElementException e){
-                System.out.println("Данные не найдены в файле");
-                System.exit(0);
+                System.out.println("Введите значение");
             }
         }
         return num;

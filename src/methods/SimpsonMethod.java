@@ -1,11 +1,11 @@
 package methods;
 
-import java.util.function.DoubleFunction;
+import data.IntegratedFunction;
 
 public class SimpsonMethod extends AbstractMethod{
 
 
-    public SimpsonMethod(DoubleFunction<Double> function, double eps, double a, double b){
+    public SimpsonMethod(IntegratedFunction function, double eps, double a, double b){
         super(function, eps, a, b);
         this.k = 4;
     }
@@ -20,10 +20,10 @@ public class SimpsonMethod extends AbstractMethod{
 
             int j = 0;
             for (double i = a; i <= b; i = rounding(i + h), j++) {
-                f_x = function.apply(i);
+                f_x = function.function().apply(i);
                 if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
                     x = x + 0.0000001;
-                    f_x = function.apply(x);
+                    f_x = function.function().apply(x);
                 }
 //                writeIteration("x = " + i + " f(x) = " + f_x);
                 if(i == a || i == b){
@@ -38,7 +38,6 @@ public class SimpsonMethod extends AbstractMethod{
             result = (h / 3) * sum;
             writeIteration("Новое значение интеграла: " + result + " при числе разбиений: " + n);
             writeIteration("------------------------------");
-            checkDivergent();
             if(checkEndCondition()) break;
             result_last = result;
             n = n * 2;
