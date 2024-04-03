@@ -4,7 +4,6 @@ import data.IntegratedFunction;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.function.Function;
 
 public abstract class AbstractMethod {
 
@@ -26,30 +25,22 @@ public abstract class AbstractMethod {
         this.delta = Double.MAX_VALUE;
     }
 
-//    public void checkDivergent(){
-//        if(result_last != 0) {
-//            if (Math.abs(result - result_last) > delta) {
-//                System.out.println("Интеграл расходится");
-//                System.exit(0);
-//            }
-//            delta = Math.abs(result - result_last);
-////            writeIteration("delta = " + delta);
-//        }
-//    }
-
+    //работает только с разрывом на границе интервала и с известной первообразной
     public static void checkDivergent(IntegratedFunction function, double a, double b){
-        double c = (function.primitiveFunc().apply(b) - function.primitiveFunc().apply(a));
+        double c = (function.primitiveFunc.apply(b) - function.primitiveFunc.apply(a));
         if(c == Double.POSITIVE_INFINITY || c == Double.NEGATIVE_INFINITY || Double.isNaN(c)) {
             System.out.println("Интеграл расходится");
-                System.exit(0);
+            System.exit(0);
         }
     }
 
     public abstract void solve();
     //вернет true, когда условие окончания выполняется, и надо заканчивать итерации
     public boolean checkEndCondition(){
-//        writeIteration("result = " + result + " result_last = " + result_last + " s = " + Math.abs((result - result_last) / (Math.pow(2, k) - 1)));
-        return (Math.abs((result - result_last) / (Math.pow(2, k) - 1)) < eps);
+        if(result_last != 0) {
+            writeIteration(" s = " + Math.abs((result - result_last) / (Math.pow(2, k) - 1)));
+            return (Math.abs((result - result_last) / (Math.pow(2, k) - 1)) < eps);
+        } else return false;
     }
 
     public void writeIteration(String string){
@@ -74,6 +65,6 @@ public abstract class AbstractMethod {
 
     public void exactValue(){
         writeResult("------------------------------");
-        writeResult("Точное значение функции = " + (function.primitiveFunc().apply(b) - function.primitiveFunc().apply(a)));
+        writeResult("Точное значение функции = " + (function.primitiveFunc.apply(b) - function.primitiveFunc.apply(a)));
     }
 }

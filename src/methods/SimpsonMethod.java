@@ -20,10 +20,10 @@ public class SimpsonMethod extends AbstractMethod{
 
             int j = 0;
             for (double i = a; i <= b; i = rounding(i + h), j++) {
-                f_x = function.function().apply(i);
+                f_x = function.function.apply(i);
                 if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
                     x = x + 0.0000001;
-                    f_x = function.function().apply(x);
+                    f_x = function.function.apply(x);
                 }
 //                writeIteration("x = " + i + " f(x) = " + f_x);
                 if(i == a || i == b){

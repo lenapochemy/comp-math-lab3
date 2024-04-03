@@ -20,10 +20,10 @@ public class TrapezoidMethod extends AbstractMethod{
 //            sum = (function.apply(a) + function.apply(b)) / 2;
 
             for (double i = a ; i <= b ; i = rounding(i + h)) {
-                f_x = function.function().apply(i);
+                f_x = function.function.apply(i);
                 if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
                     x = x + 0.0000001;
-                    f_x = function.function().apply(x);
+                    f_x = function.function.apply(x);
                 }
                 if(i == a || i == b) sum += (f_x / 2);
                 else sum += f_x;

@@ -37,11 +37,11 @@ public class RectangleMethod extends AbstractMethod{
                         x = i;
                     }
                 }
-                f_x = function.function().apply(x);
+                f_x = function.function.apply(x);
 //                writeIteration("x = " + x + " f(x) = " + f_x);
                 if(f_x == Double.POSITIVE_INFINITY || f_x == Double.NEGATIVE_INFINITY) {
                     x = x + 0.0000001;
-                    f_x = function.function().apply(x);
+                    f_x = function.function.apply(x);
                 }
                 sum += f_x;
             }

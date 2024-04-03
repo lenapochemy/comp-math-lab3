@@ -80,7 +80,7 @@ public class ScannerManager {
             try {
                 System.out.println("Выберите функцию для решения: ");
                 for(int i = 0; i < n; i++){
-                    System.out.println("\t" + (i+1) + ". "+ functions[i].funcString());
+                    System.out.println("\t" + (i+1) + ". "+ functions[i].funcString);
                 }
                 sNum = scanner.nextLine().trim();
                 if(sNum.isEmpty()) throw new NullPointerException();
